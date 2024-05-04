@@ -1,0 +1,221 @@
+{% extends 'nav.html' %}
+{% load custom_filters %}
+
+{% block style_block %}
+
+<style>
+    body {
+        background-color: rgba(193, 194, 196, 0.5);
+        padding: 15px;
+    }
+    a{
+        text-decoration: none;
+        color: black;
+    }
+    .rounded-circle {
+        width: 30px;
+    }
+    
+    @media (min-width:981px){
+            img{
+                width: 96%;                
+        }
+
+            p{
+            text-align: justify;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .cop{
+            width: 96%;
+        }
+        .posted{
+            font-size: 9px;
+            margin-top: 1px;
+            padding-top: 1px;
+        }
+        .name{
+            margin-bottom: 1px;
+            padding-bottom: 1px;
+        }
+        
+        
+        }
+
+
+        @media (min-width:601px) and (max-width:980px){
+            img{
+                width: 96%;                
+        }
+
+            p{
+            text-align: justify;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .cop{
+            width: 96%;
+        }
+        .posted{
+            font-size: 9px;
+            margin-top: 1px;
+            padding-top: 1px;
+        }
+        .name{
+            margin-bottom: 1px;
+            padding-bottom: 1px;
+        }
+
+        }
+
+
+        @media (max-width:600px){
+            img{
+                width: 96%;                
+        }
+
+            p{
+            text-align: justify;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .cop{
+            width: 96%;
+        }
+        .posted{
+            font-size: 9px;
+            margin-top: 1px;
+            padding-top: 1px;
+        }
+        .name{
+            margin-bottom: 1px;
+            padding-bottom: 1px;
+        }
+
+        }
+   
+</style>
+
+{% endblock %}
+
+
+{% block body_block %}
+
+<div class="row">
+
+    <div class="col-lg-4">
+
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12">
+        {% if search %}
+
+        {% for user in result %}
+        <div class="row py-0 border-top border-bottom shadow-sm mb-2 bg-dark-subtle rounded">
+            
+            <div class="col-3">
+                {% if user.user_profile.image %}
+                <a href="{% url 'Authentication:author_profile' pk=user.pk %}" class="text-dark">
+                <img src="/media/{{ user.user_profile.image }}" width="40px" height="40px" class="rounded mt-1">
+                </a>
+                {% else %}
+                <a href="{% url 'Authentication:author_profile' pk=user.pk %}" class="text-dark">
+                    <img src="/media/profile_pics/default.jpg" width="40px" height="40px" class="rounded mt-1">
+                </a>
+                {% endif %}
+            </div>
+        <div class="col-9">
+            <a href="{% url 'Authentication:author_profile' pk=user.pk %}" class="text-dark">
+            {{ user.username }} <br>
+            {{ user.first_name }} {{ user.last_name }}
+        </a>
+        </div>
+        </div>
+        {% endfor %}
+        {% else%}
+
+        {% for post in following_posts %}
+        <div class="mt-2 rounded border shadow shadow-sm bg-light">
+            <div class="row">
+                <div class="col-1 my-auto ps-3">
+                    {% if post.user.user_profile.image %}
+                    <a href="{% url 'Authentication:author_profile' pk=post.user.pk %}" class="text-dark">
+                    <img src="{{ post.user.user_profile.image.url }}" height="25px" class="rounded-circle">
+                    </a>
+                    {% else %}
+                    <a href="{% url 'Authentication:author_profile' pk=post.user.pk %}" class="text-dark">
+                    <img src="/media/profile_pics/default.jpg" height="25px" class="rounded-circle">
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="col-10">
+                    
+                    <p class="pt-1 ps-2 name fs-5"><b><a href="{% url 'Authentication:author_profile' pk=post.user.pk %}" class="text-dark">{{ post.user.first_name }} {{ post.user.last_name }}</a></b></p>
+                </div>
+                <div class="col-1">
+                    {% if post.user == user %}
+                    <div class="dropdown">
+                        <a class="text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-ellipsis-vertical pt-2"></i>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li><a class="dropdown-item" href="{% url 'Post:update_post' pk=post.pk %}"><i class="fa-regular fa-pen-to-square"></i> Edit post </a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url 'Post:delete_post' pk=post.pk%}"> <i class="fa-solid fa-trash-can"></i> Move to bin </a></li>
+                      </div>
+                      {% endif %}
+                </div>
+            </div>
+
+        <p class="posted mb-1 ps-2"><i class="fa-solid fa-clock"></i>   
+            {% if post.posted == post.updated %}
+            {{ post.posted }}
+            {% elif post.posted != post.updated %}    
+            {{ post.updated }} (updated)
+            {% endif %}
+        </p>
+
+        {% if post.image %}
+        <center>
+        <div class="rounded">
+        <img src="{{ post.image.url }}" class="rounded">
+        </div>
+        </center>
+        {% endif %}
+        {% if post.caption %}
+        <center>
+        <div class="mt-2 px-2 cap">
+            {% if post.caption|length > 100 %}
+            <p>{{ post.caption|see_more }} <a href="{% url 'Post:comment' pk=post.pk %}"><b>...see more</b></a></p>
+            {% else %}
+            <p>{{ post.caption }}</p>
+            {% endif %}
+
+        </div>
+        </center>
+        {% endif %}
+        <div class="row my-0 py-1 border-top border-bottom">
+            <div class="col-6 my-0 py-0 text-center fs-5">
+                {% if liked|get_item:post.id %}
+                <a href="{% url 'Post:undo_like' pk=post.pk %}" class="text-dark ps-2"><i class="fa-solid fa-heart"></i> {{ post.post_like.count }} </a>
+                {% else %}                
+                <a href="{% url 'Post:liked' pk=post.pk %}" class="ps-2"><i class="fa-regular fa-heart"></i> {{ post.post_like.count }}</a>
+                {% endif %}
+            </div>
+            <div class="col-6 text-center fs-5 my-0 py-0 border-start">
+                <a href="{% url 'Post:comment' pk=post.pk %}" class="text-dark" style="text-decoration: none;"><i class="fa-regular fa-comment"></i> Comments| {{ post.post_comment.count }}</a>
+            </div>
+        </div>
+        </div>
+        {% empty %}
+        <div>
+            Add a friend to see contents
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+    <div class="col-lg-4">
+
+    </div>
+
+</div>
+
+{% endblock %}
