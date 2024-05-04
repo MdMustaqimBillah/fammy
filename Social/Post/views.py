@@ -14,12 +14,15 @@ from django.contrib import messages
 
 
 # Create your views here.
-
+@login_required
 def post_like_info(user, posts):
     liked_info = models.Like.objects.filter(user=user, post__in=posts).values_list('post_id', flat=True)
     return list(liked_info)
 
 
+
+
+@login_required
 def home(request, pk=None):
     if request.method =='GET':
         search= request.GET.get('search','')
@@ -111,7 +114,7 @@ class DeleteComment(LoginRequiredMixin,DeleteView):
     template_name = 'Post/comment_delete.html'
     success_url = ''
 
-
+@login_required
 def liked(request,pk):
     post = models.Post.objects.get(pk=pk)
     user = request.user
@@ -124,7 +127,7 @@ def liked(request,pk):
     return HttpResponseRedirect(reverse('Post:home_like',kwargs={'pk':pk}))
    
 
-    
+@login_required  
 def undo_like(request, pk):
     post = models.Post.objects.get(pk=pk)
     user = request.user
@@ -143,7 +146,7 @@ def get_comment_reactions(user, post, comments):
     return list(comment_reactions)
 
 
-
+@login_required
 def comment_on_post(request,pk):
     user = request.user
     form = CommentForm()
@@ -169,7 +172,7 @@ def comment_on_post(request,pk):
         'liked':liked,
         'reacted':reacted
     }
-    return render(request, 'Post/Comment.html', context=dictionary)
+    return render(request, 'Post/comment.html', context=dictionary)
 
 
 
@@ -199,7 +202,7 @@ class CommentDelete(LoginRequiredMixin,DeleteView):
     def get_success_url(self):
         return reverse_lazy('Post:comment', kwargs={'pk': self.object.post.pk})
 
-
+@login_required
 def inside_liked(request,pk):
     post = models.Post.objects.get(pk=pk)
     user = request.user
@@ -212,7 +215,7 @@ def inside_liked(request,pk):
     return HttpResponseRedirect(reverse('Post:comment',kwargs={'pk':pk}))
    
 
-
+@login_required
 def undo_inside_like(request, pk):
     post = models.Post.objects.get(pk=pk)
     user = request.user
@@ -223,7 +226,7 @@ def undo_inside_like(request, pk):
         liked.delete()
     return HttpResponseRedirect(reverse('Post:comment',kwargs={'pk':pk}))
 
-
+@login_required
 def comment_reaction(request,pk):
     comment = models.Comment.objects.get(pk=pk)
     user = request.user
@@ -239,7 +242,7 @@ def comment_reaction(request,pk):
     return HttpResponseRedirect(reverse('Post:comment',kwargs={'pk':post.pk}))
 
 
-
+@login_required
 def undo_comment_reaction(request, pk):
     comment = models.Comment.objects.get(pk=pk)
     user = request.user
@@ -259,7 +262,7 @@ def get_post_reactions(user, posts):
     ).values_list('post__id', flat=True)
     return list(post_reactions)
 
-
+@login_required
 def my_posts(request):
     user = request.user
     posts = models.Post.objects.filter(user=user)
@@ -296,7 +299,7 @@ def undo_my_post_like(request,pk):
     return HttpResponseRedirect(reverse('Post:my_posts'))
 
 
-
+@login_required
 def author_posts(request, pk):
     author = models.User.objects.get(pk=pk)
     posts = models.Post.objects.filter(user=author)

@@ -263,7 +263,7 @@
                 <div class="col-1">
                     {% if comment.user.profile_pic %}
                     <a href="{% url 'Authentication:author_profile' pk=comment.user.pk %}" class="text-dark">
-                    <img src="{% url 'post.user.profile_pic.url' %}" height="20px" class="rounded-circle cmnt-pic">
+                    <img src="{% url 'comment.user.profile_pic.url' %}" height="20px" class="rounded-circle cmnt-pic">
                     </a>
                     {% else %}
                     <a href="{% url 'Authentication:author_profile' pk=comment.user.pk %}" class="text-dark">

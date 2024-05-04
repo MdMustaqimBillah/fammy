@@ -58,7 +58,7 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('user_login'))
 
 
-
+@login_required
 def update_profile(request):
     try:
         current_user = models.UserProfile.objects.get(author=request.user)
