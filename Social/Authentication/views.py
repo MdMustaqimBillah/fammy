@@ -11,10 +11,8 @@ from . import models
 from django.utils import timezone
 from django.contrib import messages
 from Post.models import Post
+import re
 
-
-
-# Create your views here.
 
 
 def sign_up(request):
