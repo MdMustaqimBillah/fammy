@@ -1,0 +1,160 @@
+{% extends 'nav2.html' %}
+{% block style_block %}
+<style>
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+@media (min-width:981px){
+    .image{
+        width: 100%;
+        height: 380px;
+        border-radius: 2%;
+        display: block;
+        margin-left: 10px;
+    }
+    .marg{
+        margin-top: 40px;
+    }
+    .btn{
+        width: 60%;
+    }
+    .border{
+        border-radius: 17px;
+    }
+    .row{
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-top: 1%;
+        width: 98%;
+    }
+    
+        }
+
+
+@media (min-width:601px) and (max-width:980px){
+    body{
+        width: 96%;
+        margin-top: 70px;
+        margin-right: 2%;
+        margin-left: 2%;
+
+    }
+    .marg{
+        margin-top: 40px;
+    }
+    .image{
+        width: 96%;
+        aspect-ratio: 1/1;
+        object-fit: fill;
+        border-radius: 50%;
+    }
+    .btn{
+        width: 100%;
+    }
+    p{
+        text-align: justify;
+    }
+        }
+
+
+@media (max-width:600px){
+    body{
+        padding-left:2%;
+        padding-right:2%;
+        margin-top: 70px;
+        width: 100%;
+    }
+    .image{
+        width: 95%;
+        aspect-ratio: 1/1;
+        object-fit: fill;
+        border-radius: 50%;
+        
+    }
+    .marg{
+        margin-top: 45px;
+    }
+    .btn{
+        width: 100%;
+    }
+    .intro{
+        width: 95%;
+        border-radius: 7px;
+        border: 1px black;
+        box-shadow: inset;
+        background-color: aliceblue;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    p{
+        text-align: justify;
+    }
+    .details{
+        margin-top: 2%;
+    }
+        }
+
+</style>
+{% endblock %}
+
+
+{% block body_block %}
+
+<div class="row border shadow mx-auto pt-3 rounded">
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mb-1 mx-2">
+        {% if author.user_profile.image %}
+        <img src="{{ author.user_profile.image.url }}" class="image">
+
+        {% else %}
+
+        <img src="/media/profile_pics/default.jpg" class="image">
+        {% endif %}
+    </div>
+    <div class="details col-sm-12 col-md-5 col-lg-6 mx-2 pe-0 ps-3">
+        
+        <div class="row">
+            <div class="col-7">
+                <p class="fs-6"><b>{{ author.user_profile.first_name }} {{ author.user_profile.last_name }}</b></p>
+            </div>
+            <div class="col-5">
+                {% if not followed %}
+
+                <a href="{% url 'Authentication:follow' author.pk %}" class="btn btn-sm btn-primary" style="width:80%;"><i class="fa-solid fa-circle-plus">  </i> Follow </a>
+
+                {% else %}
+
+                <a href="{% url 'Authentication:unfollow' author.pk %}" class="btn btn-sm btn-primary" style="width:90%;"><i class="fa-solid fa-circle-check"></i> Unfollow</a>
+
+                {% endif %}
+            </div>
+        </div>
+        <p class="fs-6"><b>Email:</b> {{ author.email }}</p>
+        {% if author.user_profile.bio %}
+        <div class="intro">
+        <p><b>Introduction:</b></p>
+        <p>{{ author.user_profile.bio }}</p>
+        </div>
+        {% endif %}
+        {% if author.user_profile.dob %}
+        <p><b>Date of Birth:</b> {{ author.user_profile.dob }}</p>
+        {% endif %}
+        {% if author.user_profile.gender %}
+        <p><b>Gender:</b>{{ author.user_profile.gender }}</p>
+        {% endif %}
+        <div class="row">
+            <div class="col-4">
+                <p><b>followers:</b> {{ author.following.count }}</p>
+                <a href="{% url 'Post:author_posts' pk=author.pk %}"><p><b>Post:</b> {{ author.user_post.count }} </p></a>
+            </div>
+            <div class="col-4">
+                <P><b>followings:</b> {{ author.follower.count }}</P>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

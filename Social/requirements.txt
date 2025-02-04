@@ -1,0 +1,12 @@
+django
+django-browser-reload
+django-cleanup
+django-crispy-forms
+Jinja2
+mysqlclient
+pillow
+Pygments
+python-slugify
+PyYAML
+requests
+fontawesomefree
