@@ -65,16 +65,10 @@ def user_login(request):
 
 
 @login_required
-def user_logout(request):
-    logout(request)
-    messages.warning(request,'Logged out successfully')
-    return HttpResponseRedirect(reverse('user_login'))
-
-
-@login_required
 def update_profile(request):
     try:
-        current_user = models.UserProfile.objects.get(user=request.user)
+         current_user = models.UserProfile.objects.get(user=request.user)
+
     except models.UserProfile.DoesNotExist:
         current_user = models.UserProfile(user=request.user, dob= timezone.now())
     if request.method == 'POST':

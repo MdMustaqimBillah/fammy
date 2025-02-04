@@ -74,7 +74,6 @@ class PostMaking(LoginRequiredMixin, CreateView):
             messages.success(self.request,'Post created successfully')
             return HttpResponseRedirect(reverse('Post:home'))
         
-
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = models.Post
     fields = ['image','caption']
