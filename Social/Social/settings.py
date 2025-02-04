@@ -85,14 +85,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Social.wsgi.application'
 
-
-# Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "family$default",
+        "USER": "family",
+        "PASSWORD": "Pr!v4t3D8",
+        "HOST": "family.mysql.pythonanywhere-services.com",
+        "PORT": "3306",
     }
 }
 
