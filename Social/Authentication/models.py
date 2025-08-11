@@ -78,8 +78,5 @@ class Following(models.Model):
         verbose_name_plural = 'Followers'
 
     def __str__(self):
-<<<<<<< HEAD
         return f"{self.user.email} follows {self.follower.email}"
-=======
-        return f"{self.user.email} follows {self.follower.email}"
->>>>>>> a88f89457711b6fcdaf05ec707caf220cdb22b97
+
